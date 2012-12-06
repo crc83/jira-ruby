@@ -31,6 +31,8 @@ module JIRA
 
       has_many :worklogs, :nested_under => ['fields','worklog']
 
+      has_many :transitions, :nested_under => ['fields','transition']
+
       def self.all(client)
         response = client.get(client.options[:rest_base_path] + "/search")
         json = parse_json(response.body)
