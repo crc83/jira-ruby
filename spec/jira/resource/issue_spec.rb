@@ -41,6 +41,7 @@ describe JIRA::Resource::Issue do
           'comment'     => { 'comments' => [{'foo' => 'bar'}, {'baz' => 'flum'}]},
           'attachment'  => [{'foo' => 'bar'}, {'baz' => 'flum'}],
           'worklog'     => { 'worklogs' => [{'foo' => 'bar'}, {'baz' => 'flum'}]},
+          'transition'  => [ 'transitions' => [{'foo' => 'bar'}, {'baz' => 'flum'}]]
         }
       })
     }
@@ -78,6 +79,9 @@ describe JIRA::Resource::Issue do
 
       subject.should have_many(:worklogs, JIRA::Resource::Worklog)
       subject.worklogs.length.should == 2
+
+      subject.should have_many(:transitions, JIRA::Resource::Worklog)
+      subject.transitions.length.should == 2
     end
   end
 end
