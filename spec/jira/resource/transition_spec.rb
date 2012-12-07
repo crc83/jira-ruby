@@ -6,7 +6,7 @@ describe JIRA::Resource::Transition do
 
   it "should find an issue by key or id" do
     response = mock()
-    response.stub(:body).and_return('{"key":"foo","id":"101"}')
+    response.stub(:body).and_return('{"id":"5","name":"Resolve issue"}')
     JIRA::Resource::Transition.stub(:collection_path).and_return('/jira/rest/api/2/issue/101/transition')
     client.should_receive(:get).with('/jira/rest/api/2/issue/foo/transition').
       and_return(response)
@@ -19,69 +19,13 @@ describe JIRA::Resource::Transition do
     issue_from_id.attrs.should == issue_from_key.attrs
   end
 
+  # do I really need this?
+  # I need only name and Id
   it "provides direct accessors to the fields" do
-    subject = JIRA::Resource::Issue.new(client, :attrs => {'fields' => {'foo' =>'bar'}})
-    subject.should respond_to(:foo)
+    subject = JIRA::Resource::Transition.new(client, :attrs => {'fields' => {'foo' =>'bar'}})
+    subject.should respond_to(:foo) 
     subject.foo.should == 'bar'
   end
 
-  describe "relationships" do
-    subject {
-      JIRA::Resource::Issue.new(client, :attrs => {
-        'id' => '123',
-        'fields' => {
-          'reporter'    => {'foo' => 'bar'},
-          'assignee'    => {'foo' => 'bar'},
-          'project'     => {'foo' => 'bar'},
-          'priority'    => {'foo' => 'bar'},
-          'issuetype'   => {'foo' => 'bar'},
-          'status'      => {'foo' => 'bar'},
-          'components'  => [{'foo' => 'bar'}, {'baz' => 'flum'}],
-          'versions'    => [{'foo' => 'bar'}, {'baz' => 'flum'}],
-          'comment'     => { 'comments' => [{'foo' => 'bar'}, {'baz' => 'flum'}]},
-          'attachment'  => [{'foo' => 'bar'}, {'baz' => 'flum'}],
-          'worklog'     => { 'worklogs' => [{'foo' => 'bar'}, {'baz' => 'flum'}]},
-          'transitions'  => { 'transitions' => [{'foo' => 'bar'}, {'baz' => 'flum'}]}
-        }
-      })
-    }
-
-    it "has the correct relationships" do
-      subject.should have_one(:reporter, JIRA::Resource::User)
-      subject.reporter.foo.should == 'bar'
-
-      subject.should have_one(:assignee, JIRA::Resource::User)
-      subject.assignee.foo.should == 'bar'
-
-      subject.should have_one(:project, JIRA::Resource::Project)
-      subject.project.foo.should == 'bar'
-
-      subject.should have_one(:issuetype, JIRA::Resource::Issuetype)
-      subject.issuetype.foo.should == 'bar'
-
-      subject.should have_one(:priority, JIRA::Resource::Priority)
-      subject.priority.foo.should == 'bar'
-
-      subject.should have_one(:status, JIRA::Resource::Status)
-      subject.status.foo.should == 'bar'
-
-      subject.should have_many(:components, JIRA::Resource::Component)
-      subject.components.length.should == 2
-
-      subject.should have_many(:comments, JIRA::Resource::Comment)
-      subject.comments.length.should == 2
-
-      subject.should have_many(:attachments, JIRA::Resource::Attachment)
-      subject.attachments.length.should == 2
-
-      subject.should have_many(:versions, JIRA::Resource::Version)
-      subject.attachments.length.should == 2
-
-      subject.should have_many(:worklogs, JIRA::Resource::Worklog)
-      subject.worklogs.length.should == 2
-
-      subject.should have_many(:transitions, JIRA::Resource::Transition)
-      subject.transitions.length.should == 2
-    end
-  end
+ 
 end
