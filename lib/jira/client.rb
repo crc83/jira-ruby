@@ -107,6 +107,10 @@ module JIRA
       JIRA::Resource::WorklogFactory.new(self)
     end
 
+    def Transition # :nodoc:
+      JIRA::Resource::TransitionFactory.new(self)
+    end
+
     def Version # :nodoc:
       JIRA::Resource::VersionFactory.new(self)
     end
