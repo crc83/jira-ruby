@@ -1,20 +1,20 @@
 require 'spec_helper'
 
-describe JIRA::Resource::Issue do
+describe JIRA::Resource::Transition do
 
   let(:client) { mock() }
 
   it "should find an issue by key or id" do
     response = mock()
     response.stub(:body).and_return('{"key":"foo","id":"101"}')
-    JIRA::Resource::Issue.stub(:collection_path).and_return('/jira/rest/api/2/issue')
-    client.should_receive(:get).with('/jira/rest/api/2/issue/foo').
+    JIRA::Resource::Transition.stub(:collection_path).and_return('/jira/rest/api/2/issue/101/transition')
+    client.should_receive(:get).with('/jira/rest/api/2/issue/foo/transition').
       and_return(response)
-    client.should_receive(:get).with('/jira/rest/api/2/issue/101').
+    client.should_receive(:get).with('/jira/rest/api/2/issue/101/transition').
       and_return(response)
 
-    issue_from_id = JIRA::Resource::Issue.find(client,101)
-    issue_from_key = JIRA::Resource::Issue.find(client,'foo')
+    issue_from_id = JIRA::Resource::Transition.find(client,101)
+    issue_from_key = JIRA::Resource::Transition.find(client,'foo')
 
     issue_from_id.attrs.should == issue_from_key.attrs
   end
@@ -40,7 +40,8 @@ describe JIRA::Resource::Issue do
           'versions'    => [{'foo' => 'bar'}, {'baz' => 'flum'}],
           'comment'     => { 'comments' => [{'foo' => 'bar'}, {'baz' => 'flum'}]},
           'attachment'  => [{'foo' => 'bar'}, {'baz' => 'flum'}],
-          'worklog'     => { 'worklogs' => [{'foo' => 'bar'}, {'baz' => 'flum'}]}
+          'worklog'     => { 'worklogs' => [{'foo' => 'bar'}, {'baz' => 'flum'}]},
+          'transitions'  => { 'transitions' => [{'foo' => 'bar'}, {'baz' => 'flum'}]}
         }
       })
     }
@@ -79,7 +80,7 @@ describe JIRA::Resource::Issue do
       subject.should have_many(:worklogs, JIRA::Resource::Worklog)
       subject.worklogs.length.should == 2
 
-      subject.should have_many(:transitions, JIRA::Resource::Worklog)
+      subject.should have_many(:transitions, JIRA::Resource::Transition)
       subject.transitions.length.should == 2
     end
   end

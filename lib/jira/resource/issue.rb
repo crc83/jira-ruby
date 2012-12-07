@@ -31,7 +31,8 @@ module JIRA
 
       has_many :worklogs, :nested_under => ['fields','worklog']
 
-      has_many :transitions, :nested_under => ['fields','transition']
+      # we can't get transitions at once. we should make separate rest request to fetch them
+      # has_many :transitions, :nested_under => ['fields','transitions']
 
       def self.all(client)
         response = client.get(client.options[:rest_base_path] + "/search")
