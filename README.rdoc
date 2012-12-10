@@ -2,6 +2,7 @@
 
 This gem provides access to the Atlassian JIRA version 5 REST API (a.k.a REST
 API version 2).
+* Addition : This api proides workflow management facilities
 
 == Example usage
 
